@@ -1,53 +1,77 @@
 <?php
 
+use yii\grid\GridView;
+use yii\data\ActiveDataProvider;
+use app\models\TopMenu;
+use yii\widgets\Menu;
+use app\models\Category;
+use yii\helpers\Html;
+
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Breaking News';
 ?>
 <div class="site-index">
-
     <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+        <h1>Добрый день!</h1>
+        <p class="lead">Новостной сайт приветствует Вас!</p>
     </div>
 
     <div class="body-content">
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+        <table border="0" width="100%">
+            <tr>
+                <td>
+                    <?php
+                        echo Menu::widget([
+                            'options' => ['class' => 'clearfix', 'id'=>'main-menu'],
+                            'encodeLabels'=>false,
+                            'activateParents'=>true,
+                            'activeCssClass'=>'current-menu-item',
+                            // подключаем модель и  вызываем метод,  который строит всю логику формирования меню
+                            'items' => app\models\TopMenu::viewMenuItems(0),
+                        ]);
+                        $dataProvider->pagination->pageSize=3;
+                    ?>
+                </td>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <td>
+                        <?= GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'columns' => [
+                                ['class' => 'yii\grid\SerialColumn'],
+                                [
+                                    'attribute'=>'title',
+                                    'label' => 'Заголовок',
+                                    'format'=>'raw',
+                                    'value' => function ($data, $url, $model) {
+                                        return Html::a($data['title'], "/news/".$data['title']);
+                                    },
+                                ],
+                                'anounce:ntext',
+                                'created_at',
+                                [
+                                    'attribute'=>'catid',
+                                    'label' => 'Категория',
+                                    'format'=>'raw',
+                                    'value' => function ($data, $url, $model) {
+                                        return Category::find()->select('title')->where(['id' => $data['catid']])->scalar();
+                                    },
+                                ],
+                                [
+                                    'attribute'=>'status',
+                                    'label' => 'Активность',
+                                    'format'=>'raw',
+                                    'value' => function ($data, $url, $model) {
+                                        return $data['status'] ? 'Да' : 'Нет';
+                                    },
+                                ],
+                            ],
+                        ]); ?>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
+                </td>
+            </tr>
+        </table>
 
     </div>
 </div>

@@ -7,7 +7,9 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
+    'language' => 'ru-RU', // язык приложения
+    'id' => 'breakingNews',
+    'name' => 'Breaking News',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -52,9 +54,12 @@ $config = [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+                'news/<action:index|create|update|delete|view|review>'=>'news/<action>',
+                'category/<action:index|create|update|delete|view|review>'=>'news/<action>',
+                'news/<title:.+>' => 'news/review',
+                'category/<title:.+>' => 'category/review',
             ],
         ], 
-
     ],
     'params' => $params,
 ];

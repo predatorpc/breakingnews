@@ -9,6 +9,11 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\NewsSearch;
+use app\models\News;
+use app\models\Category;
+use app\models\CategorySearch;
+
 
 class SiteController extends Controller
 {
@@ -20,10 +25,9 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'admin', ],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -32,7 +36,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['get','post'],
                 ],
             ],
         ];
@@ -61,7 +65,30 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new NewsSearch();
+        $dataProvider = $searchModel->searchForMainPage(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+        //return $this->render('index');
+    }
+
+    /**
+     * Login action.
+     *
+     * @return Response|string
+     */
+    public function actionAdmin()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+        else
+        {
+            return $this->render('admin');
+        }
     }
 
     /**
@@ -77,7 +104,9 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->render('admin', [
+                'model' => $model,
+            ]);
         }
 
         $model->password = '';
