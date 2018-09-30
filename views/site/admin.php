@@ -14,6 +14,6 @@ use yii\bootstrap\ActiveForm;
 <div class="site-login">
     <h1>Управление сайтом</h1>
 
-    Теперь вам доступно редактирование <a href="/news">Новостей</a> и <a href="/category">Категорий новостей</a>
+    Теперь вам доступно<br><a href="/news">Редактирование Новостей</a><br><a href="/news-comments">Редактирование Комментариев к Новостям</a><br><a href="/category">Редактирование Категорий новостей</a>
 
 </div>

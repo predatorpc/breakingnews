@@ -94,6 +94,10 @@ class CategoryController extends Controller
      */
     public function actionCreate()
     {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = new Category();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -134,7 +138,7 @@ class CategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        if (!Yii::$app->user->isGuest) {
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 

@@ -2,18 +2,21 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use app\models\Category;
+use app\models\News;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Category */
+/* @var $model app\models\NewsComments */
 
-$this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Категории', 'url' => ['index']];
+$title = News::find()->where(['ID'=>$model->newsid])->one()->title;
+
+$this->title = $title;
+$this->params['breadcrumbs'][] = ['label' => 'Комментарии', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="category-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+?>
+<div class="news-comments-view">
+
+    <h3>Комментарий к новости: <?= Html::encode($title); ?></h3>
 
     <p>
         <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -30,17 +33,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'title',
-            [
-                'attribute' => 'parentid',
-                'value' => !empty(Category::find()->where(['id' => $model->parentid])->one()->title) ?
-                    Category::find()->where(['id' => $model->parentid])->one()->title : "Корневая",
-            ],
-
+            'newsid',
+            'comment:ntext',
+            'commentator:ntext',
             [
                 'attribute' => 'status',
                 'value' => $model->status ? 'Да' : 'Нет',
             ],
+
+            'created_at',
         ],
     ]) ?>
 

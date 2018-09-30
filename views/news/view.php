@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Category;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\News */
@@ -32,9 +33,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'title:ntext',
             'anounce:ntext',
             'body:ntext',
-            'catid',
-            'status',
+            [
+                'attribute' => 'catid',
+                'value' => !empty(Category::find()->where(['id' => $model->catid])->one()->title) ?
+                    Category::find()->where(['id' => $model->catid])->one()->title : "Корневая",
+            ],
+
+            [
+                'attribute' => 'status',
+                'value' => $model->status ? 'Да' : 'Нет',
+            ],
+
         ],
-    ]) ?>
+    ])
+
+    ?>
 
 </div>

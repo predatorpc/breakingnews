@@ -28,7 +28,7 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title', 'parentid'], 'required'],
             [['parentid', 'status'], 'default', 'value' => null],
             [['parentid', 'status'], 'integer'],
             [['title'], 'string'],
@@ -48,4 +48,5 @@ class Category extends \yii\db\ActiveRecord
             'status' => 'Активность',
         ];
     }
+
 }

@@ -5,3 +5,10 @@
 return [
     'adminEmail' => 'admin@breakingnews',
 ];
+
+function print_arr($arr)
+{
+    echo "<pre>";
+    print_r($arr);
+    echo "</pre>";
+}

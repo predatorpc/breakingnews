@@ -55,7 +55,9 @@ $config = [
             'enableStrictParsing' => false,
             'rules' => [
                 'news/<action:index|create|update|delete|view|review>'=>'news/<action>',
-                'category/<action:index|create|update|delete|view|review>'=>'news/<action>',
+                'newscomments/<action:index|create|update|delete|view|review>'=>'newscomments/<action>',
+                'category/<action:index|create|update|delete|view|review>'=>'category/<action>',
+                'news/<id:\d+>' => 'news/reviewcomments',
                 'news/<title:.+>' => 'news/review',
                 'category/<title:.+>' => 'category/review',
             ],

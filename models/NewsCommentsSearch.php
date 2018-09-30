@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Category;
+use app\models\NewsComments;
 
 /**
- * CatgegorySearch represents the model behind the search form of `app\models\Category`.
+ * NewsCommentsSearch represents the model behind the search form of `app\models\NewsComments`.
  */
-class CatgegorySearch extends Category
+class NewsCommentsSearch extends NewsComments
 {
     /**
      * {@inheritdoc}
@@ -18,8 +18,8 @@ class CatgegorySearch extends Category
     public function rules()
     {
         return [
-            [['id', 'parentid', 'status'], 'integer'],
-            [['title'], 'safe'],
+            [['id', 'newsid', 'status'], 'integer'],
+            [['comment', 'commentator'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class CatgegorySearch extends Category
      */
     public function search($params)
     {
-        $query = Category::find();
+        $query = NewsComments::find();
 
         // add conditions that should always apply here
 
@@ -57,32 +57,45 @@ class CatgegorySearch extends Category
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'parentid' => $this->parentid,
+            'newsid' => $this->newsid,
+            'status' => $this->status,
         ]);
 
-        // поиск по названию
-        $query->andFilterWhere(['ilike', 'title', $this->title]);
+        $query->andFilterWhere(['ilike', 'comment', $this->comment])
+            ->andFilterWhere(['ilike', 'commentator', $this->commentator]);
 
         return $dataProvider;
     }
 
-    public function searchForNewsInCategory($title)
-    {
-        $catID = Category::find()->select('id')->where(['title' => $title])->scalar();
 
-        $query = News::find();
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchForSingleNews($id)
+    {
+        $query = NewsComments::find();
+
+        // add conditions that should always apply here
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
-        $query->andWhere([
-            'catid' => $catID, // только относящиеся к этой категории
-            'status' => 1, //только активные
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'newsid' => $id,
+            'status' => 1,
         ]);
 
-        //отдаем провайдера назад
+        $query->orderBy('created_at DESC');
+
         return $dataProvider;
     }
 }

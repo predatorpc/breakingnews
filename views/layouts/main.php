@@ -56,6 +56,7 @@ AppAsset::register($this);
             'items' => [
                     ['label' => 'Главная', 'url' => ['/site/index']],
                     ['label' => 'Новости', 'url' => ['/news']],
+                    ['label' => 'Комментарии', 'url' => ['/news-comments']],
                     ['label' => 'Категории', 'url' => ['/category']],
                     ['label' => 'Управление', 'url' => ['/site/admin']],
                     ['label' => 'Выход', 'url' => ['/site/logout']],

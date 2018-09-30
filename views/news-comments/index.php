@@ -2,22 +2,21 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\models\Category;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\CatgegorySearch */
+/* @var $searchModel app\models\NewsCommentsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Категории';
+$this->title = 'Комментарии к новостям';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="category-index">
+<div class="news-comments-index">
 
-    <h1>Список категорий</h1>
+    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить катгорию', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить новый комментарий', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,22 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            'newsid',
             [
-                'attribute'=>'title',
+                'attribute'=>'comment',
                 'label' => 'Заголовок',
                 'format'=>'raw',
                 'value' => function ($data, $url, $model) {
-                    return Html::a($data['title'], "/category/update?id=".$data['id']);
+                    return Html::a($data['comment'], "/news-comments/update?id=".$data['id']);
                 },
             ],
-            [
-                'attribute'=>'parentid',
-                'label' => 'Родительская категория',
-                'format'=>'raw',
-                'value' => function ($data, $url, $model) {
-                    return Category::find()->select('title')->where(['id' => $data['parentid']])->scalar();
-                },
-            ],
+            'commentator:ntext',
             [
                 'attribute'=>'status',
                 'label' => 'Активность',
@@ -51,6 +44,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $data['status'] ? 'Да' : 'Нет';
                 },
             ],
+            
+            'created_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

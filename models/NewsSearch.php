@@ -99,6 +99,8 @@ class NewsSearch extends News
             ->andFilterWhere(['ilike', 'anounce', $this->anounce])
             ->andFilterWhere(['ilike', 'body', $this->body]);
 
+        $query->orderBy('created_at DESC');
+
         return $dataProvider;
     }
 }

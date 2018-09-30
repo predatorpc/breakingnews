@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\helpers\StringHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\News */
@@ -21,12 +22,29 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'title:ntext',
-            'anounce:ntext',
-            'body:ntext',
+            [
+                'attribute'=>'title',
+                'label' => 'Заголовок',
+                'format'=>'raw',
+                'value' => function ($data, $url, $model) {
+                    return Html::a($data['title'], "/news/".$data['title']);
+                },
+            ],
+            [
+                'attribute' => 'anounce',
+                'value' => function ($model) {
+                    return StringHelper::truncate($model->anounce, 200);
+                }
+            ],
+            [
+                'attribute' => 'body',
+                'value' => function ($model) {
+                    return StringHelper::truncate($model->body, 200);
+                }
+            ],
             'created_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+         //   ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 

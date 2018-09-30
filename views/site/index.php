@@ -6,22 +6,22 @@ use app\models\TopMenu;
 use yii\widgets\Menu;
 use app\models\Category;
 use yii\helpers\Html;
+use yii\helpers\StringHelper;
 
 /* @var $this yii\web\View */
 
 $this->title = 'Breaking News';
 ?>
 <div class="site-index">
-    <div class="jumbotron">
-        <h1>Добрый день!</h1>
-        <p class="lead">Новостной сайт приветствует Вас!</p>
-    </div>
-
-    <div class="body-content">
-
         <table border="0" width="100%">
             <tr>
-                <td>
+                <td colspan="2" align="center" valign="top">
+                    <h2>Добрый день! Самые горячие новости на BreakingNews</h2><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td width="40%" valign="top">
+                    <h3>Меню</h3>
                     <?php
                         echo Menu::widget([
                             'options' => ['class' => 'clearfix', 'id'=>'main-menu'],
@@ -35,9 +35,11 @@ $this->title = 'Breaking News';
                     ?>
                 </td>
 
-                <td>
+                <td width="60%" valign="top">
+                    <h3>Новости</h3>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
+                            'layout'=>"{items}\n{pager}",
                             'columns' => [
                                 ['class' => 'yii\grid\SerialColumn'],
                                 [
@@ -48,8 +50,12 @@ $this->title = 'Breaking News';
                                         return Html::a($data['title'], "/news/".$data['title']);
                                     },
                                 ],
-                                'anounce:ntext',
-                                'created_at',
+                                [
+                                    'attribute' => 'anounce',
+                                    'value' => function ($model) {
+                                        return StringHelper::truncate($model->anounce, 200);
+                                    }
+                                ],
                                 [
                                     'attribute'=>'catid',
                                     'label' => 'Категория',
@@ -58,20 +64,11 @@ $this->title = 'Breaking News';
                                         return Category::find()->select('title')->where(['id' => $data['catid']])->scalar();
                                     },
                                 ],
-                                [
-                                    'attribute'=>'status',
-                                    'label' => 'Активность',
-                                    'format'=>'raw',
-                                    'value' => function ($data, $url, $model) {
-                                        return $data['status'] ? 'Да' : 'Нет';
-                                    },
-                                ],
+                                'created_at',
                             ],
                         ]); ?>
 
                 </td>
             </tr>
         </table>
-
-    </div>
 </div>
