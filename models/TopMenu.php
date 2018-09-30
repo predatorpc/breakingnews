@@ -44,8 +44,6 @@ class TopMenu
                 $childrens[] = $children['id'];
             }
 
-          //  print_arr($childrens);
-
             $childrensHasNews = Category::find()
                 ->leftJoin('news','category.id = news.catid')
                 ->where(['news.catid' => $childrens])
@@ -55,15 +53,10 @@ class TopMenu
                 ->andWhere(['category.status' => 1])
                 ->count();
 
-      //      print_arr($childrensHasNews);//die();
-
             //в зависимости от результатата добавляем в массив или нет
             //есть новости или новостей нет но есть дети тогда добавляем
             if (!empty($newsCount) || (!empty($childrensCount) && !empty($childrensHasNews))){
                 $result[] = [
-                    //'label' => $childrensHasNews > 0  ?  $items['title']." (". $childrensHasNews . ") " :  $items['title']." (". $newsCount . ") ",
-                    //'label' => $items['title'] . " (". ($childrensHasNews + $newsCount) . ") ",
-                    //'label' => $items['title'] . " [ ".$childrensHasNews." ] - (" . $newsCount . ")",
                     'label' => $items['title'] . " (" . $newsCount . ") ",
                     'url' => '/category/' . $items['title'],
                     'linkOptions' => ['title' => $items['title']],

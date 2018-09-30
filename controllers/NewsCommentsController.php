@@ -102,11 +102,11 @@ class NewsCommentsController extends Controller
         $model->created_at = new Expression('NOW()');
 
         if ($model->load(Yii::$app->request->get()) && $model->save()) {
-            $modelNews = News::find()->where(['ID' => $model->newsid])->one();
+            //$modelNews = News::find()->where(['ID' => $model->newsid])->one();
             return $this->redirect('/news/'.$model->newsid);
         }
         else {
-            $modelNews = News::find()->where(['ID' => $model->newsid])->one();
+            //$modelNews = News::find()->where(['ID' => $model->newsid])->one();
             return $this->render('/news/' . $model->newsid, [
                 'model' => $model,
             ]);

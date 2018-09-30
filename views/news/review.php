@@ -66,10 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
     </div>
 
-
     <?php ActiveForm::end();
-
-
 
     ?>
 
